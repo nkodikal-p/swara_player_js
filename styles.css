@@ -1,0 +1,227 @@
+body {
+    font-family: Arial, sans-serif; /* Use a modern font */
+    color: #333; /* Dark gray text color */
+}
+
+.score-play-container {
+    display: flex;
+    /* Use flexbox to layout children */
+    align-items: center;
+    /* Align items vertically in the center */
+    gap: 10px;
+    /* Add some space between the score text and the play button */
+}
+#score_text {
+    width: 300px;
+    height: 200px;
+    font-family: Consolas, monospace;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+#score_text:focus {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+input[type="text"] {
+    border: none;
+    border-bottom: 2px solid #4CAF50; /* Green underline */
+    font-size: 16px;
+}
+
+.modern-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 9px #999; /* Add box shadow for 3D effect */
+    transition-duration: 0.1s;
+}
+
+.modern-button:active {
+    box-shadow: 0 5px #666; /* Reduce box shadow when button is clicked */
+    transform: translateY(4px); /* Move button down when clicked */
+}
+
+.answer-button {
+    background-color: #1a9be0;
+    /* Green */
+    border: none;
+    color: rgb(249, 249, 250);
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    width: 100px;
+    font-size: 12px;
+    margin: 10px 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0 5px #999;
+    /* Add box shadow for 3D effect */
+    transition-duration: 0.1s;
+}
+
+.answer-button:active {
+    box-shadow: 0 2px #666;
+    /* Reduce box shadow when button is clicked */
+    transform: translateY(1px);
+    /* Move button down when clicked */
+}
+
+.transpose-button {
+    background-color: #1a9be0;
+    /* Green */
+    border: none;
+    color: rgb(249, 249, 250);
+    padding: 2px 2px;
+    text-align: center;
+    text-decoration: none;
+    width: 20px;
+    font-size: 16px;
+    margin: 3px 3px;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: 0 2px #999;
+    /* Add box shadow for 3D effect */
+    transition-duration: 0.1s;
+}
+
+.transpose-button:active {
+    box-shadow: 0 1px #666;
+    /* Reduce box shadow when button is clicked */
+    transform: translateY(1px);
+    /* Move button down when clicked */
+}
+#transposeValue {
+    display: inline-block;
+    /* Makes width setting effective */
+    width: 10px;
+    /* Example width, adjust as needed */
+}
+.controls-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+
+#level-select {
+    margin-left: 10px;
+    /* Add some space between the button and the select */
+}
+/* Hide the default radio button */
+input[type="radio"] {
+    display: none;
+}
+
+/* Create a new radio button */
+input[type="radio"] + label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    position: relative;
+    bottom: 1px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the radio button when it's checked */
+input[type="radio"]:checked + label:before {
+    background-color: #4CAF50;
+}
+
+/* Add a white dot in the center of the radio button when it's checked */
+input[type="radio"]:checked + label:after {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: absolute; /* Change this line */
+    top: 50%; /* Change this line */
+    left: 50%; /* Change this line */
+    transform: translate(-50%, -50%); /* Add this line */
+    border-radius: 50%;
+    background: white;
+}
+/* Hide the default radio button */
+.styled-radio {
+    display: none;
+}
+
+
+/* Create a new radio button */
+.styled-radio+label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    position: relative;
+    bottom: 1px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the radio button when it's checked */
+.styled-radio:checked+label:before {
+    background-color: #4CAF50;
+}
+
+/* Add a white dot in the center of the radio button when it's checked */
+.styled-radio:checked+label:after {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Add this line */
+
+    border-radius: 50%;
+    background: white;
+}
+.select-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    background: #f2f2f2;
+    border-radius: 3px;
+    border: 1px solid #dcdcdc;
+}
+
+.select-wrapper select {
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    cursor: pointer;
+}
+
+.select-wrapper select:focus {
+    outline: none;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
