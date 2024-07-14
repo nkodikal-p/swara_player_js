@@ -109,9 +109,9 @@ function playgameAudio(gamenotes) {
 
     // Create synth instances
     const synthFullVolume = new Tone.Synth().toDestination();
-    const synthHalfVolume = new Tone.Synth().chain(new Tone.Volume(-10), Tone.Destination);
+    const synthHalfVolume = new Tone.Synth().chain(new Tone.Volume(-6), Tone.Destination); // basenote 8dB lower volume
 
-    // Play base note for the entire duration at half volume
+    // Play base note for the entire duration 
     synthHalfVolume.triggerAttackRelease(baseNote, totalDuration / 1000, Tone.now());
 
     gamenotes.forEach((note, index) => {

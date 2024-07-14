@@ -45,7 +45,7 @@ input[type="text"] {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 12px;
-    box-shadow: 0 9px #999; /* Add box shadow for 3D effect */
+    box-shadow: 0 5px #999; /* Add box shadow for 3D effect */
     transition-duration: 0.1s;
 }
 
