@@ -225,3 +225,11 @@ input[type="radio"]:checked + label:after {
     flex-direction: column;
 }
 
+.footer{ 
+    color: rgb(201, 201, 202);
+    font-size: 14px;
+    position: fixed;     
+    text-align: left;    
+    bottom: 0px; 
+    width: 100%;
+} 
