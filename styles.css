@@ -13,7 +13,9 @@ body {
 }
 #score_text {
     width: 50%;
-    height: 150px;
+    height: 125px;  /* Fixed height */
+    overflow-y: auto;  /* Enables vertical scrolling */
+    overflow-x: hidden; /* Hides horizontal scrollbar */
     font-family: Consolas, monospace;
     font-size: 16px;
     padding: 10px;
