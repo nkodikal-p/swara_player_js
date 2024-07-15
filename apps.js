@@ -52,10 +52,21 @@ function getShiftedNote(note, transpose) {
 // function to play the score
 function playScore() {
 
-    var scoreLines = document.getElementById('score_text').innerText.split(/[\n\r]+/);
+    var scoreLines = document.getElementById('score_text').innerText.split(/[\n\r]+/); // get the score text and split it by new lines
 
-    var bpm = parseInt(document.getElementById('bpm').value, 10);
+    var bpm = parseInt(document.getElementById('bpm').value, 10); // get the 'bpm' value
+    // if bpm is not a number or less than 1, set it to 60
+    if (isNaN(bpm) || bpm < 1) {
+        bpm = 60;
+        document.getElementById('bpm').value = bpm;
+    }
+
     var taal = parseInt(document.getElementById('taal').value, 10); // Get the 'taal' value
+    // if taal is not a number or less than 1, set it to 4
+    if (isNaN(taal) || taal < 1) {
+        taal = 4;
+        document.getElementById('taal').value = taal;
+    }
 
     var beatDuration = (60 / bpm) * 1000; // Duration of a single beat in milliseconds
     const synth = new Tone.Synth().toDestination();
