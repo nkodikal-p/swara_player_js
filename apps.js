@@ -1,5 +1,5 @@
 const noteMap = {
-    '\'S': 'C3', '\'r': 'Db3', '\'R': 'D3', '\'g': 'Eb3', '\'G': 'E3', '\'m': 'F3', '\'M': 'Gb3', '\'P': 'G3', '\'d': 'Ab3', '\'D': 'A3', '\'n': 'Bb3', '\'N': 'B3', 'S': 'C4', 'r': 'Db4', 'R': 'D4', 'g': 'Eb4', 'G': 'E4', 'm': 'F4', 'M': 'Gb4', 'P': 'G4', 'd': 'Ab4', 'D': 'A4', 'n': 'Bb4', 'N': 'B4', 'S\'': 'C5', 'r\'': 'Db5', 'R\'': 'D5', 'g\'': 'Eb5', 'G\'': 'E5', 'm\'': 'F5', 'M\'': 'Gb5', 'P\'': 'G5', 'd\'': 'Ab5', 'D\'': 'A5', 'n\'': 'Bb5', 'N\'': 'B5', 'S\'\'': 'C6', '-': 'A1'
+    '\'S': 'C3', '\'r': 'Db3', '\'R': 'D3', '\'g': 'Eb3', '\'G': 'E3', '\'m': 'F3', '\'M': 'Gb3', '\'P': 'G3', '\'d': 'Ab3', '\'D': 'A3', '\'n': 'Bb3', '\'N': 'B3', 'S': 'C4', 'r': 'Db4', 'R': 'D4', 'g': 'Eb4', 'G': 'E4', 'm': 'F4', 'M': 'Gb4', 'P': 'G4', 'd': 'Ab4', 'D': 'A4', 'n': 'Bb4', 'N': 'B4', 'S\'': 'C5', 'r\'': 'Db5', 'R\'': 'D5', 'g\'': 'Eb5', 'G\'': 'E5', 'm\'': 'F5', 'M\'': 'Gb5', 'P\'': 'G5', 'd\'': 'Ab5', 'D\'': 'A5', 'n\'': 'Bb5', 'N\'': 'B5', 'S\'\'': 'C6', '-': 'SILENCE'
 }; // Map of Indian notes to Western notes
 
 // handle transpose changes
@@ -20,7 +20,7 @@ document.getElementById('increaseTranspose').addEventListener('click', function 
 });
 
 // get the transpose value from the input field
-updateTransposeDisplay(); 
+updateTransposeDisplay();
 
 // Create a function to play a click sound for the metronome
 function playClick() {
@@ -70,6 +70,7 @@ function playScore() {
 
     var beatDuration = (60 / bpm) * 1000; // Duration of a single beat in milliseconds
     const synth = new Tone.Synth().toDestination();
+    const synthSilent = new Tone.Synth().chain(new Tone.Volume(-64), Tone.Destination); // Silence is 64dB lower volume
 
     let noteIndex = 0; // Keep track of the overall note index across lines
     let clickCount = 0; // Keep track of the number of notes played to determine when to play the click sound
@@ -94,8 +95,11 @@ function playScore() {
                         return l;
                     }).join('<br>');
                     // play musical note
+                    if (musicalNote === 'SILENCE') {
+                        synthSilent.triggerAttackRelease('C1', noteDuration / 1000, Tone.now()); // Play a silent note
+                    } else {
                     synth.triggerAttackRelease(musicalNote, noteDuration / 1000, Tone.now());
-
+                    }
                     // Play click sound every 'taal' notes if metronome is on
                     if (document.getElementById('metronomeOn').checked && ++clickCount % taal === 1) {
                         playClick();
@@ -115,7 +119,7 @@ function playgameAudio(gamenotes) {
 
     var baseNote = getShiftedNote('S', transpose); // Base note is always 'S' (with transpose)
 
-    
+
     const totalDuration = gamenotes.length * 2000; // Total duration based on number of notes and delay
 
     // Create synth instances
@@ -165,15 +169,15 @@ function playGame() {
         playgameAudio(challenge);
     }
     //setTimeout(() => {
-        // reveal musical note
-        //document.getElementById('score_text').innerHTML = challenge.join(' ');
+    // reveal musical note
+    //document.getElementById('score_text').innerHTML = challenge.join(' ');
     //}, challenge.length * 2500);
 
 
-    
+
     // Call addShowAnswerButton with the current challenge
     addShowAnswerButton(challenge);
-    
+
     function addShowAnswerButton(challenge) {
         let showAnswerButton = document.getElementById('showAnswerButton');
         if (!showAnswerButton) {
@@ -200,7 +204,7 @@ function playGame() {
         };
     }
 
-    
+
 }
 
 // below code is for the audio context to avoid the warnings
