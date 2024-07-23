@@ -68,50 +68,52 @@ function playScore() {
         document.getElementById('taal').value = taal;
     }
 
-    var beatDuration = (60 / bpm) * 1000; // Duration of a single beat in milliseconds
+    const beatDuration = (60 / bpm) * 1000; // Duration of a single beat in milliseconds
+    
     const synth = new Tone.Synth().toDestination();
     const synthSilent = new Tone.Synth().chain(new Tone.Volume(-64), Tone.Destination); // Silence is 64dB lower volume
 
-    let noteIndex = 0; // Keep track of the overall note index across lines
-    let clickCount = 0; // Keep track of the number of notes played to determine when to play the click sound
+    let segmentStartTime = 0; // Start time for each segment
+    let cumSegIndex = 0; // Keep track of cumulative segment index for metronome
 
     scoreLines.forEach((line, lineIndex) => {
-        // Split the line by spaces and commas, and filter out empty strings
-        var notes = line.trim().split(/[\s,]+/).filter(note => note.trim() !== '');
-        notes.forEach((note, indexInLine) => {
-            var musicalNote = getShiftedNote(note, transpose); // Convert Indian note to Western note from transposed noteMap
+        let segments = line.trim().split(/\s+/); // Split each line into segments by whitespace
 
-            if (musicalNote) {
-                // Check if the original line has a comma before this note
-                let isCommaSeparated = line.includes(',' + note) || line.includes(note + ',');
-                let noteDuration = isCommaSeparated ? beatDuration / 2 : beatDuration;
+        segments.forEach((segment,segIndex) => {
+            let notes = segment.split(','); // Split each segment into notes by comma
+            let noteDuration = beatDuration / notes.length; // Duration for each note within a segment
 
+            notes.forEach((note, noteIndex) => { // Iterate over each note in the segment
                 setTimeout(() => {
-                    // Highlight the current note
-                    document.getElementById(`score_text`).innerHTML = scoreLines.map((l, li) => {
-                        if (li === lineIndex) {
-                            return l.split(/[\s,]+/).map((n, ni) => ni === indexInLine ? `<span style="background-color: lightblue;">${n}</span>` : n).join(' ');
-                        }
-                        return l;
-                    }).join('<br>');
-                    // play musical note
-                    if (musicalNote === 'SILENCE') {
-                        synthSilent.triggerAttackRelease('C1', noteDuration / 1000, Tone.now()); // Play a silent note
+
+                  
+                    // Play the note or silence based on the note
+                    if (note === '-') {
+                        synthSilent.triggerAttackRelease('C1', noteDuration / 1000, Tone.now());
+                        console.log(`Playing: Silence for ${noteDuration / 1000}s at ${Tone.now()}s`);
                     } else {
-                    synth.triggerAttackRelease(musicalNote, noteDuration / 1000, Tone.now());
+                        var musicalNote = getShiftedNote(note, transpose); // Convert Indian note to Western note from noteMap
+                        console.log(`Playing: ${note} ${musicalNote} for ${noteDuration / 1000}s segment ${cumSegIndex} modulo ${Math.abs(cumSegIndex % taal) } in line ${lineIndex}`);
+                        synth.triggerAttackRelease(musicalNote, noteDuration / 1000, Tone.now());
+                        // Play click sound every 'taal' notes if metronome is on
+                        if (document.getElementById('metronomeOn').checked && Math.abs(cumSegIndex % taal) <= 0.001) {
+                            //console.log(`Playing click at  for segment ${cumSegIndex} in line ${lineIndex} note ${note}`);
+                            playClick();
+                        }
                     }
-                    // Play click sound every 'taal' notes if metronome is on
-                    if (document.getElementById('metronomeOn').checked && ++clickCount % taal === 1) {
-                        playClick();
-                    }
+                    cumSegIndex += 1/notes.length; // Increment cumulative segment index
 
-                }, noteIndex * beatDuration);
+                }, segmentStartTime + noteIndex * noteDuration);
 
-                noteIndex += isCommaSeparated ? 0.5 : 1; // Increment the overall note index by 0.5 for comma-separated notes, otherwise by 1
-            }
+            });
+           
+            segmentStartTime += beatDuration; // Increment start time for the next segment
+
         });
     });
 }
+
+
 
 // function to play game audio
 function playgameAudio(gamenotes) {
