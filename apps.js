@@ -85,7 +85,13 @@ function playScore() {
 
             notes.forEach((note, noteIndex) => { // Iterate over each note in the segment
                 setTimeout(() => {
-
+                    // Highlight the current note
+                    document.getElementById(`score_text`).innerHTML = scoreLines.map((l, li) => {
+                        if (li === lineIndex) {
+                            return l.split(/[\s]+/).map((n, ni) => ni === segIndex ? `<span style="background-color: lightblue;">${n}</span>` : n).join(' ');
+                        }
+                        return l;
+                    }).join('<br>');
                   
                     // Play the note or silence based on the note
                     if (note === '-') {
