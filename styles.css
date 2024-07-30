@@ -227,6 +227,61 @@ input[type="radio"]:checked + label:after {
     flex-direction: column;
 }
 
+#buttonContainer {
+    margin-top: 10px;
+}
+
+.scoreButton {
+
+    background-color: #cbcbcb;
+        /* Green */
+        border: none;
+        color: rgb(73, 62, 109);
+        padding: 2px 2px;
+        text-align: center;
+        text-decoration: none;
+        width: 20px;
+        font-size: 14px;
+        margin: 3px 3px;
+        cursor: pointer;
+        border-radius: 2px;
+        box-shadow: 0 2px #506b83;
+        /* Add box shadow for 3D effect */
+        transition-duration: 0.1s;
+}
+
+.stopButton {
+    background-color: #d87272;
+
+}
+
+.scoreButton:active {
+    box-shadow: 0 1px #666;
+    /* Reduce box shadow when button is clicked */
+    transform: translateY(1px);
+    /* Move button down when clicked */
+}
+.wideButton {
+    width: fit-content;
+    /* Adjust the width as needed */
+}
+#komal1 {
+    margin-left: 20px;
+}
+
+#komal2 {
+    margin-left: 35px;
+}
+
+#komal3 {
+    margin-left: 30px;
+}
+#komal4 {
+    margin-left: 35px;
+}
+#keyman {
+    margin-left: 135px;
+}
 .footer{ 
     color: rgb(201, 201, 202);
     font-size: 14px;
