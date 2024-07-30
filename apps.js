@@ -51,7 +51,7 @@ function getShiftedNote(note, transpose) {
 
 // function to play the score
 function playScore() {
-
+    
     var scoreLines = document.getElementById('score_text').innerText.split(/[\n\r]+/); // get the score text and split it by new lines
 
     var bpm = parseInt(document.getElementById('bpm').value, 10); // get the 'bpm' value
@@ -85,6 +85,7 @@ function playScore() {
 
             notes.forEach((note, noteIndex) => { // Iterate over each note in the segment
                 setTimeout(() => {
+
                     // Highlight the current note
                     document.getElementById(`score_text`).innerHTML = scoreLines.map((l, li) => {
                         if (li === lineIndex) {
@@ -117,12 +118,16 @@ function playScore() {
 
         });
     });
+    
+
 }
+
 
 
 
 // function to play game audio
 function playgameAudio(gamenotes) {
+   
     if (gamenotes.length === 0) return; // Exit if there are no game notes
 
     var baseNote = getShiftedNote('S', transpose); // Base note is always 'S' (with transpose)
@@ -132,6 +137,8 @@ function playgameAudio(gamenotes) {
 
     // Create synth instances
     const synthFullVolume = new Tone.Synth().toDestination();
+    const synthSilent = new Tone.Synth().chain(new Tone.Volume(-64), Tone.Destination); // Silence is 64dB lower volume
+
     const synthHalfVolume = new Tone.Synth().chain(new Tone.Volume(-6), Tone.Destination); // basenote 8dB lower volume
 
     // Play base note for the entire duration 
@@ -141,10 +148,16 @@ function playgameAudio(gamenotes) {
         var musicalNote = getShiftedNote(note, transpose); // Convert Indian note to Western note from noteMap
 
         setTimeout(() => {
-            // Play musical note at full volume
+            if (musicalNote === 'SILENCE') {
+                synthSilent.triggerAttackRelease('C1', 0.3, Tone.now()); // Play a silent note
+            }
+            else {// Play musical note at full volume
             synthFullVolume.triggerAttackRelease(musicalNote, 1, Tone.now() + index);
-        }, index * 1000 + 500); // Add 500ms delay before playing the first note
+            }
+        }, index * 1000); // Add 500ms delay before playing the first note
+
     });
+
 }
 
 // function to play the game
@@ -156,24 +169,24 @@ function playGame() {
     document.getElementById('metronomeOn').checked = false;
 
     var level = document.getElementById('level-select').value; // Get the selected level
-    var n_b_notes = ['R', 'G', 'm', 'P', 'D', 'N', 'S\''];
-    var i_notes = ['r', 'R', 'g', 'G', 'm', 'M', 'P', 'd', 'D', 'n', 'N', 'S\''];
-    var a_notes = ['\'m', '\'M', '\'P', '\'D', '\'N', 'S', 'r', 'R', 'g', 'G', 'm', 'M', 'P', 'd', 'D', 'n', 'N', 'S\'', 'R\'', 'G\'', 'm\'', 'P\''];
+    var n_b_notes = ['R', 'G', 'm', 'P', 'D', 'N', 'S\'']; // notes for novice and beginner levels
+    var i_notes = ['r', 'R', 'g', 'G', 'm', 'M', 'P', 'd', 'D', 'n', 'N', 'S\'']; // notes for intermediate level
+    var a_notes = ['\'m', '\'M', '\'P', '\'D', '\'N', 'S', 'r', 'R', 'g', 'G', 'm', 'M', 'P', 'd', 'D', 'n', 'N', 'S\'', 'R\'', 'G\'', 'm\'', 'P\'']; // notes for advanced level
     var randomNote1 = n_b_notes[Math.floor(Math.random() * n_b_notes.length)];
     var randomNote2 = n_b_notes[Math.floor(Math.random() * n_b_notes.length)];
     var randomNote3 = i_notes[Math.floor(Math.random() * i_notes.length)];
     var randomNote4 = a_notes[Math.floor(Math.random() * a_notes.length)];
     if (level === 'novice') {
-        var challenge = [randomNote1];
+        var challenge = ['-',randomNote1];
         playgameAudio(challenge);
     } else if (level === 'beginner') {
-        var challenge = [randomNote1, randomNote2];
+        var challenge = ['-', randomNote1, randomNote2];
         playgameAudio(challenge);
     } else if (level === 'intermediate') {
-        var challenge = [randomNote1, randomNote2, randomNote3];
+        var challenge = ['-', randomNote1, randomNote2, randomNote3];
         playgameAudio(challenge);
     } else if (level === 'advanced') {
-        var challenge = [randomNote1, randomNote2, randomNote3, randomNote4];
+        var challenge = ['-', randomNote1, randomNote2, randomNote3, randomNote4];
         playgameAudio(challenge);
     }
     //setTimeout(() => {
@@ -181,39 +194,101 @@ function playGame() {
     //document.getElementById('score_text').innerHTML = challenge.join(' ');
     //}, challenge.length * 2500);
 
+    // Calculate the total duration of the challenge
+    var totalDuration = challenge.length * 1000; // Assuming each note takes 2500ms
 
+    // answer is challenge without the first element
+    let answer = challenge.slice(1).join(' ');
 
-    // Call addShowAnswerButton with the current challenge
-    addShowAnswerButton(challenge);
+    // Set a timeout to prompt the user after the challenge has finished playing
+    setTimeout(() => {
+       
+        // Prompt the user to enter an answer
+        var userAnswer = prompt('Enter your answer:');
+        // Call addShowAnswerButton with the current challenge
+        addShowAnswerButton(userAnswer, answer);
 
-    function addShowAnswerButton(challenge) {
-        let showAnswerButton = document.getElementById('showAnswerButton');
-        if (!showAnswerButton) {
-            // Create the 'Show Answer' button if it doesn't exist
-            showAnswerButton = document.createElement('button');
-            showAnswerButton.textContent = 'Show Answer';
-            showAnswerButton.id = 'showAnswerButton';
-            // Insert the 'Show Answer' button after the 'Name that Swara' button
-            nameThatSwaraButton.insertAdjacentElement('afterend', showAnswerButton);
-        } else {
-            // If the button already exists, just update its position
-            nameThatSwaraButton.insertAdjacentElement('afterend', showAnswerButton);
-        }
-        // Add the 'answer-button' class to the element for css styling
-        showAnswerButton.classList.add('answer-button');
+    }, totalDuration);
 
-        // Update the event listener every time addShowAnswerButton is called
-        showAnswerButton.onclick = function () {
-            document.getElementById('score_text').innerHTML = challenge.join(' ');
-        };
-        // Update the event listener every time addShowAnswerButton is called
-        showAnswerButton.onclick = function () {
-            document.getElementById('score_text').innerHTML = challenge.join(' ');
-        };
+    
+    function addShowAnswerButton(userAnswer,answer) {
+            
+            // check if user entered the correct answer and print it in score_text
+            if (userAnswer === answer) {
+                document.getElementById('score_text').innerHTML = 'Correct! <br> Swara(s): ' + answer;
+            }
+            else {
+                document.getElementById('score_text').innerHTML = `Swara(s):  &nbsp &nbsp${answer} <br> You entered: ${userAnswer}`;
+            }
+          
     }
 
 
 }
+
+
+// Function to update the score_text element
+function updateScoreText(text) {
+    const scoreTextElement = document.getElementById('score_text');
+    const selection = window.getSelection(); // Get the current selection
+    if (selection.rangeCount === 0 || !scoreTextElement.contains(selection.anchorNode)) {
+        scoreTextElement.focus(); // Focus the text area if it's not focused
+    }
+    const range = selection.getRangeAt(0); // Get the range of the selection
+    range.deleteContents();
+
+
+        let textNode;
+
+    if (text === 'Clear') {
+        // put cursor at the beginning of the score text
+        range.setStart(scoreTextElement, 0);
+        range.setEnd(scoreTextElement, 0);
+        selection.removeAllRanges();
+        selection.addRange(range); // Add the updated range to the selection       
+        // Clear the score text
+        scoreTextElement.innerHTML = '';
+        return;
+    }
+
+    else if (text === ',') {
+        // if previous character is a space, remove the space
+        if (range.startOffset > 0 && range.startContainer.textContent[range.startOffset - 1] === ' ') {
+            console.log('removing space');
+            range.setStart(range.startContainer, range.startOffset - 1);
+            range.deleteContents();
+        }
+        textNode = document.createTextNode(text);
+    }
+    else if (text === '⤶') {
+        // Enter key inserts a new line
+        textNode = document.createElement("br");
+    }
+    else  {
+        // Create a text node with the selected text
+        textNode = document.createTextNode(text + ' '); 
+        }
+
+    range.insertNode(textNode); // Insert the text node into the range
+    // Move the cursor to the end of the inserted text
+    range.setStart(textNode, textNode.length);
+    range.setEnd(textNode, textNode.length);
+    selection.removeAllRanges();
+    selection.addRange(range); // Add the updated range to the selection
+    console.log('done function updateScoreText. range offset: ', range.startOffset);
+
+
+}
+
+
+// Add event listeners to the buttons
+document.querySelectorAll('.scoreButton').forEach(button => {
+    button.addEventListener('click', function () {
+        const text = this.getAttribute('data-text');
+        updateScoreText(text);
+    });
+});
+
 
 // below code is for the audio context to avoid the warnings
 // Define a variable to hold the AudioContext
@@ -229,6 +304,9 @@ function createOrResumeAudioContext() {
         audioContext.resume();
     }
 }
+
+
+
 
 // Add an event listener to the document or a specific element to handle user interaction
 document.addEventListener('click', createOrResumeAudioContext);
