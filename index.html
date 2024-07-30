@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <title>Swara Player</title>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- To fit mobile screens-->
 
@@ -13,7 +14,8 @@
 
     <br><br>
 
-    <button id="nameThatSwaraButton" class="modern-button" onclick="playGame()" style="width: 250px;">♫ Name that Swara ♫</button>
+    <button id="nameThatSwaraButton" class="modern-button" onclick="playGame()" style="width: 250px;">♫ Name that Swara
+        ♫</button>
 
     <div class="controls-container">
         <select id="level-select">
@@ -23,7 +25,7 @@
             <option value="advanced">Advanced</option>
         </select>
     </div>
-</div>
+    </div>
 
     <br><br>
     <div class="flex-container">
@@ -39,44 +41,77 @@
                 G R G - <br>
             </div>
             <!-- Play button next to the score text -->
-            <button class="modern-button" onclick="playScore()">Play ⯈</button>
+            <button class="modern-button" onclick="playScore()">Play ▶️</button>
         </div>
-  <br><br>
+        <br><br>
 
-    <div class="flex-container">
-        <div>
-            <label for="bpm">BPM:</label>
-            <input type="text" id="bpm" size="4" value="75">
-            <label for="taal">Taal:</label>
-            <input type="text" id="taal" size="4" value="4">
+        <div id="buttonContainer">
+            <button class="scoreButton" id="komal1" data-text="'d">'d</button>
+            <button class="scoreButton"             data-text="'n">'n</button>
+            <button class="scoreButton" id="komal2" data-text="r">r</button>
+            <button class="scoreButton"             data-text="g">g</button>
+            <button class="scoreButton" id="komal3" data-text="M">M</button>
+            <button class="scoreButton"             data-text="d">d</button>
+            <button class="scoreButton"             data-text="n">n</button>
+            <button class="scoreButton" id="komal4" data-text="r'">r'</button>
+            <button class="scoreButton"             data-text="g'">g'</button>
+            <br>
+            <button class="scoreButton" data-text="'P">'P</button>
+            <button class="scoreButton" data-text="'D">'D</button>
+            <button class="scoreButton" data-text="'N">'N</button>
+            <button class="scoreButton" data-text="S">S</button>
+            <button class="scoreButton" data-text="R">R</button>
+            <button class="scoreButton" data-text="G">G</button>
+            <button class="scoreButton" data-text="m">m</button>
+            <button class="scoreButton" data-text="P">P</button>
+            <button class="scoreButton" data-text="D">D</button>
+            <button class="scoreButton" data-text="N">N</button>
+            <button class="scoreButton" data-text="S'">S'</button>
+            <button class="scoreButton" data-text="R'">R'</button>
+            <button class="scoreButton" data-text="G'">G'</button>
+            <br>
+            <button class="scoreButton" id="keyman" data-text=",">,</button>
+            <button class="scoreButton"             data-text="-">-</button>
+            <button class="scoreButton"             data-text="⤶"> ⤶ </button>
+            <button class="scoreButton wideButton"  data-text="Clear">Clear</button>
 
-            <br> <br>
-            <label for="metronome">Metronome:</label>
+           <!-- Add more buttons as needed -->
+        </div>
+        <br><br>
+        <div class="flex-container">
+            <div>
+                <label for="bpm">BPM:</label>
+                <input type="text" id="bpm" size="4" value="75">
+                <label for="taal">Taal:</label>
+                <input type="text" id="taal" size="4" value="4">
 
-            <input type="radio" id="metronomeOn" name="metronome" value="on" checked>
-            <label for="metronomeOn">On</label>
+                <br> <br>
+                <label for="metronome">Metronome:</label>
 
-            <input type="radio" id="metronomeOff" name="metronome" value="off">
-            <label for="metronomeOff">Off</label>
-            
-            <br> <br> 
-            <!-- scoller for transposing the score -->
+                <input type="radio" id="metronomeOn" name="metronome" value="on" checked>
+                <label for="metronomeOn">On</label>
+
+                <input type="radio" id="metronomeOff" name="metronome" value="off">
+                <label for="metronomeOff">Off</label>
+
+                <br> <br>
+                <!-- scoller for transposing the score -->
                 <label for="transpose">Transpose:</label>
                 <button id="decreaseTranspose" class="transpose-button"> - </button>
-                        <span id="transposeValue">0</span>
-                        <button id="increaseTranspose" class="transpose-button"> + </button>
+                <span id="transposeValue">0</span>
+                <button id="increaseTranspose" class="transpose-button"> + </button>
 
 
 
+            </div>
         </div>
-    </div>
 
-    <div class="footer">2024.06 Nilesh Kodikal </div>
+        <div class="footer">2024.06 Nilesh Kodikal </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webmidi/2.9.0/webmidi.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.30/Tone.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/webmidi/2.9.0/webmidi.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.30/Tone.js"></script>
 
-    <script src="apps.js"></script>
+        <script src="apps.js"></script>
 
 </body>
 
