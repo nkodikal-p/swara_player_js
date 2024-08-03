@@ -97,10 +97,10 @@ function playScore() {
                     // Play the note or silence based on the note
                     if (note === '-') {
                         synthSilent.triggerAttackRelease('C1', noteDuration / 1000, Tone.now());
-                        console.log(`Playing: Silence for ${noteDuration / 1000}s at ${Tone.now()}s`);
+                        //console.log(`Playing: Silence for ${noteDuration / 1000}s at ${Tone.now()}s`);
                     } else {
                         var musicalNote = getShiftedNote(note, transpose); // Convert Indian note to Western note from noteMap
-                        console.log(`Playing: ${note} ${musicalNote} for ${noteDuration / 1000}s segment ${cumSegIndex} modulo ${Math.abs(cumSegIndex % taal) } in line ${lineIndex}`);
+                        //console.log(`Playing: ${note} ${musicalNote} for ${noteDuration / 1000}s segment ${cumSegIndex} modulo ${Math.abs(cumSegIndex % taal) } in line ${lineIndex}`);
                         synth.triggerAttackRelease(musicalNote, noteDuration / 1000, Tone.now());
                         // Play click sound every 'taal' notes if metronome is on
                         if (document.getElementById('metronomeOn').checked && Math.abs(cumSegIndex % taal) <= 0.001) {
@@ -161,6 +161,7 @@ function playgameAudio(gamenotes) {
 }
 
 // function to play the game
+let score = 0; // Initialize the score to 0
 function playGame() {
 
     // Delete all text in the score_text
@@ -205,24 +206,38 @@ function playGame() {
        
         // Prompt the user to enter an answer
         var userAnswer = prompt('Enter your answer:');
-        // Call addShowAnswerButton with the current challenge
-        addShowAnswerButton(userAnswer, answer);
+        // Call addShowAnswer with the current challenge
+        addShowAnswer(userAnswer, answer);
 
     }, totalDuration);
 
-    
-    function addShowAnswerButton(userAnswer,answer) {
-            
-            // check if user entered the correct answer and print it in score_text
-            if (userAnswer === answer) {
-                document.getElementById('score_text').innerHTML = 'Correct! <br> Swara(s): ' + answer;
-            }
-            else {
-                document.getElementById('score_text').innerHTML = `Swara(s):  &nbsp &nbsp${answer} <br> You entered: ${userAnswer}`;
-            }
-          
+    // Function to count the number of alphabets in a string
+    function countAlphabets(str) {
+        const matches = str.match(/[a-zA-Z]/g);
+        return matches ? matches.length : 0;
     }
 
+    // Function to add the user's answer and the correct answer to the score_text element
+    function addShowAnswer(userAnswer,answer) {
+            // Get the number of alphabets in the answer
+             const numAlphabets = countAlphabets(answer);
+
+            // check if user entered the correct answer and print it in score_text
+            if (userAnswer === answer) {
+
+                // Increase the score by 10*num of notes
+                score += 10 * numAlphabets; // Increase the score by 10*num of notes
+                document.getElementById('score_text').innerHTML = `Correct! <br> <br> Swaras: ${answer} <br> <br> Score: ${score}`;
+
+            }
+            else {
+                document.getElementById('score_text').innerHTML = `Swaras: &nbsp &nbsp &nbsp${answer} <br> <br> You entered: ${userAnswer} <br> <br> Score: ${score}`;
+            }
+      
+            
+    }
+
+   
 
 }
 
@@ -254,7 +269,7 @@ function updateScoreText(text) {
     else if (text === ',') {
         // if previous character is a space, remove the space
         if (range.startOffset > 0 && range.startContainer.textContent[range.startOffset - 1] === ' ') {
-            console.log('removing space');
+            //console.log('removing space');
             range.setStart(range.startContainer, range.startOffset - 1);
             range.deleteContents();
         }
@@ -275,7 +290,6 @@ function updateScoreText(text) {
     range.setEnd(textNode, textNode.length);
     selection.removeAllRanges();
     selection.addRange(range); // Add the updated range to the selection
-    console.log('done function updateScoreText. range offset: ', range.startOffset);
 
 
 }
